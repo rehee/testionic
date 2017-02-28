@@ -1,0 +1,28 @@
+{
+  "name": "ionic-webpack",
+  "version": "0.0.1",
+  "description": "ionic webpack starter",
+  "scripts": {
+    "install": "./node_modules/.bin/bower install && ./node_modules/.bin/gulp"
+  },
+  "devDependencies": {
+    "bower": "^1.7.0",
+    "css-loader": "^0.23.0",
+    "del": "^2.2.0",
+    "exports-loader": "^0.6.2",
+    "file-loader": "^0.8.5",
+    "gulp": "^3.9.0",
+    "gulp-util": "^3.0.7",
+    "html-loader": "^0.4.0",
+    "html-webpack-plugin": "^1.7.0",
+    "json-loader": "^0.5.4",
+    "lodash": "^3.10.1",
+    "node-sass": "^3.4.2",
+    "open": "0.0.5",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
+  }
+}
