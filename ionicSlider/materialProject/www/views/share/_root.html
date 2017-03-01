@@ -1,10 +1,18 @@
-<ion-content>
-    <div ng-controller="AppCtrl as vm" class="sample" layout="column" ng-cloak>
-        <md-content class="md-padding">
+<style> 
+    .scroll{
+        height: 100%;
+    }
+    md-tabs {
+        height: 95%;
+    }
+</style>
+<ion-content class="" style="height: 100%">
+    <div style="height: 100%" ng-controller="AppCtrl as vm" class="sample"   layout="column" ng-cloak>
+        <md-content class="md-padding" style="height: 100%">
 
 
-            <md-tabs md-selected="selectedIndex" md-align-tabs="bottom" md-border-bottom md-autoselect>
-                <md-tab ng-repeat="tab in tabs" ng-disabled="tab.disabled" ng-click="vm.c($index)" label="{{tab.title}}">
+            <md-tabs style="height: 100%" class="" md-selected="selectedIndex" md-align-tabs="bottom" md-border-bottom md-autoselect>
+                <md-tab style="height: 100%" ng-repeat="tab in tabs" ng-disabled="tab.disabled" ng-click="vm.c($index)" label="{{tab.title}}">
                     <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
                         <ion-nav-view name="tab-lll"></ion-nav-view>
                     </div>
