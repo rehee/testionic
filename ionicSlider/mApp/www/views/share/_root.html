@@ -1,0 +1,84 @@
+<style>
+    .scroll {
+        height: 100%;
+    }
+    
+    md-tabs {
+        height: 95%;
+    }
+</style>
+<ion-content class="" style="height: 100%">
+    <ion-nav-view name="contain"></ion-nav-view>
+<div ng-controller='shareCtl'>
+
+    <div id="wrapper" ng-iscroll='wrapper' ng-iscroll-delay='50'>
+      <div id="scroller">
+        <ul id="thelist">
+          <li>Pretty row 1</li>
+
+          <li id="aaa">Pretty row 2</li>
+          <li>Pretty row 3  <button ng-click="refreshiScroll()">Refresh</button></li>
+          <li><a href="http://google.com" target="_blank">Pretty row 4</a></li>
+          <li>Pretty row 5</li>
+          <li>Pretty row 6</li>
+          <li>Pretty row 7</li>
+          <li>Pretty row 8</li>
+          <li>Pretty row 9</li>
+          <li>Pretty row 10</li>
+          <li>Pretty row 11</li>
+          <li>Pretty row 12</li>
+          <li>Pretty row 13</li>
+          <li>Pretty row 14</li>
+          <li>Pretty row 15</li>
+          <li>Pretty row 16</li>
+          <li>Pretty row 17</li>
+          <li>Pretty row 18</li>
+          <li>Pretty row 19</li>
+          <li>Pretty row 20</li>
+          <li>Pretty row 21</li>
+          <li>Pretty row 22</li>
+          <li>Pretty row 23</li>
+          <li>Pretty row 24</li>
+          <li>Pretty row 25</li>
+          <li>Pretty row 26</li>
+          <li>Pretty row 27</li>
+          <li>Pretty row 28</li>
+          <li>Pretty row 29</li>
+          <li>Pretty row 30</li>
+          <li>Pretty row 31</li>
+          <li>Pretty row 32</li>
+          <li>Pretty row 33</li>
+          <li>Pretty row 34</li>
+          <li>Pretty row 35</li>
+          <li>Pretty row 36</li>
+          <li>Pretty row 37</li>
+          <li>Pretty row 38</li>
+          <li>Pretty row 39</li>
+          <li>Pretty row 40</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+     
+</ion-content>
+<div id="bottom-bar-cont" ng-controller="shareCtl as vm">
+    <div id="chevron-left" class="chevvy"><i class="fa fa-chevron-left"></i></div>
+    <div id="menu-logged-in" > 
+        <div class="myOptionsScroller" ng-iscroll='wrapper' ng-iscroll-delay='50'>
+            <ul class="myOptions" id="showMenuHere">
+                <li ng-repeat="item in vm.menus" data-load="{{item.href}}" data-init="{{item.init}}" data-params="{{item.params}}">
+                    <div class="loggedInIcon">
+                        <div class="optionIcon">
+                            <i class="fa {{item.icon}}"></i>
+                        </div>
+                    </div>
+                    <div class="optionText">{{item.text}}</div>
+                </li>
+                <div style="clear:both"></div>
+            </ul>
+        </div>
+    </div>
+    <div id="chevron-right" class="chevvy"><i class="fa fa-chevron-right"></i></div>
+
+
+</div>

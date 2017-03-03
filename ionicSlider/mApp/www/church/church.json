@@ -1,0 +1,181 @@
+{
+   "church":{
+      "name":"[APPNAME666]",
+      "lat":"51.501364",
+      "lng":"-0.14189"
+   },
+   "init":{
+      "app_version":"1.0.1",
+      "app_name":"[APPNAME666]",
+      "api_version":"1",
+      "tcs":"By using this app you agree to our full terms of use found on our website",
+      "base_url":"http:\/\/192.168.1.40:8888\/1\/3",
+      "church_id":"3",
+      "menu":{
+         "public":[
+           {
+               "text":"Home",
+               "private": false,
+               "icon":"fa-home",
+               "href":"home",
+               "dragger":true,
+               "init":null,
+               "params":null,
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"Featured",
+               "private": false,
+               "icon":"fa-bookmark-o",
+               "href":"featured",
+               "dragger":true,
+               "init":null,
+               "params":null,
+               "ios":true,
+               "android":true
+            }, 
+            {
+               "text":"Notifications",
+               "private": true,
+               "icon":"fa-asterisk",
+               "href":"notifications",
+               "dragger":true,
+               "init":null,
+               "params":null,
+               "ios":true,
+               "android":true
+            }, 
+            {
+               "text":"My Church",
+               "private": true,
+               "icon":"fa-group",
+               "href":"church",
+               "dragger":false,
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"What's On",
+               "private": false,
+               "icon":"fa-calendar-o",
+               "href":"calendar",
+               "dragger":false,
+               "init":"buildCalendar",
+               "params":"null",
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"Give",
+               "private": false,
+               "icon": "fa-credit-card",
+               "href":"give",
+               "dragger":"false",
+               "ios":false,
+               "android":true
+            },
+            {
+               "text":"Prayer",
+               "private": true,
+               "icon":"fa-comment",
+               "href":"prayer",
+               "dragger":false,
+               "init":null,
+               "params":null,
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"Podcasting",
+               "private": false,
+               "icon":"fa-microphone",
+               "href":"podcasts",
+               "dragger":false,
+               "init":null,
+               "params":null,
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"Social Feed",
+               "private": false,
+               "icon":"fa-television",
+               "href":"socialfeed",
+               "dragger":false,
+               "init":null,
+               "params":null,
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"Tickets",
+               "private": false,
+               "icon":"fa-ticket",
+               "href":"tickets",
+               "dragger":false,
+               "init":null,
+               "params":null,
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"Map",
+               "private": true,
+               "icon":"fa-compass",
+               "href":"map",
+               "dragger":true,
+               "init":null,
+               "params":null,
+               "ios":false,
+               "android":false
+            },
+            {
+               "text":"My Details",
+               "private": true,
+               "icon":"fa-user",
+               "href":"mydetails",
+               "dragger":false,
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"My Availability",
+               "private": true,
+               "icon":"fa-plane",
+               "href":"holidays",
+               "dragger":false,
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"App Settings",
+               "private": true,
+               "icon":"fa-cogs",
+               "href":"settings",
+               "dragger":false,
+               "ios":false,
+               "android":false
+            },
+            {
+               "text":"About",
+               "private": false,
+               "icon": "fa-info-circle",
+               "href":"about",
+               "dragger":"false",
+               "ios":true,
+               "android":true
+            },
+            {
+               "text":"Logout",
+               "private": true,
+               "icon":"fa-power-off ",
+               "href":"logout",
+               "dragger":false,
+               "ios":true,
+               "android":true
+            }
+         ]
+      }
+   }
+}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title></title>
+
+  <link rel="manifest" href="manifest.json">
+
+  <!-- un-comment this code to enable service worker
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(() => console.log('service worker installed'))
+          .catch(err => console.log('Error', err));
+      }
+    </script>-->
+
+  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="church/custom.css" rel="stylesheet" type="text/css" />
+  <link href="css/app.css" rel="stylesheet" type="text/css" />
+  <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
+  <link href="js/leaflet/leaflet.css" rel="stylesheet" type="text/css" />
+  <link href="css/slider.css" rel="stylesheet" type="text/css" />Í
+
+
+  <link href="church/church.css" rel="stylesheet" type="text/css" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!--just some css that needs setting by JS -->
+  <style id="jsSet">
+    body,ul,li {
+	padding:0;
+	margin:0;
+	border:0;
+}
+
+body {
+	font-size:12px;
+	-webkit-user-select:none;
+	-webkit-text-size-adjust:none;
+	font-family:helvetica;
+}
+
+#header {
+	position:absolute;
+	top:0; left:0;
+	width:100%;
+	height:45px;
+	line-height:45px;
+	background-image:-webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #fe96c9), color-stop(0.05, #d51875), color-stop(1, #7b0a2e));
+	background-image:-moz-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+	background-image:-o-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+	padding:0;
+	color:#eee;
+	font-size:20px;
+	text-align:center;
+}
+
+#header a {
+	color:#f3f3f3;
+	text-decoration:none;
+	font-weight:bold;
+	text-shadow:0 -1px 0 rgba(0,0,0,0.5);
+}
+
+#footer {
+	position:absolute;
+	bottom:0; left:0;
+	width:100%;
+	height:48px;
+	background-image:-webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #999), color-stop(0.02, #666), color-stop(1, #222));
+	background-image:-moz-linear-gradient(top, #999, #666 2%, #222);
+	background-image:-o-linear-gradient(top, #999, #666 2%, #222);
+	padding:0;
+	border-top:1px solid #444;
+}
+
+#wrapper {
+	position:absolute; z-index:1;
+	top:45px; bottom:48px; left:0;
+	width:100%;
+	background:#555;
+	overflow:auto;
+}
+
+#wrapper2 {
+	position:absolute; z-index:1;
+	top:45px; bottom:48px; left:0;
+	width:50%;
+	background:#555;
+	overflow:auto;
+}
+
+#wrapper3 {
+	position:absolute; z-index:1;
+	top:45px; bottom:48px; left:51%;
+	width:50%;
+	background:#555;
+	overflow:auto;
+}
+
+
+#scroller, .scroller {
+	position:relative;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+	float:left;
+	width:100%;
+	padding:0;
+}
+
+#scroller ul, .scroller ul {
+	position:relative;
+	list-style:none;
+	padding:0;
+	margin:0;
+	width:100%;
+	text-align:left;
+}
+
+#scroller li, .scroller li {
+	padding:0 10px;
+	height:40px;
+	line-height:40px;
+	border-bottom:1px solid #ccc;
+	border-top:1px solid #fff;
+	background-color:#fafafa;
+	font-size:14px;
+}
+
+#scroller li > a, .scroller li > a {
+	display:block;
+}
+  </style>
+  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+  <!-- ionic/angularjs js -->
+  <script src='lib/ionic/js/ionic.bundle.js'></script>
+  <script type='text/javascript' src='http://rawgithub.com/cubiq/iscroll/master/build/iscroll.js'></script>
+  <script src="js/shared.js"></script>
+  <script src="js/app.js"></script>
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
+
+  <!-- your app's js -->
+
+</head>
+
+<body ng-app="app" style="background-color:#fff">
+  <div class="removeableContainer">
+    <div id="menu-overlay-instructions">
+      <div class="shaded">
+        <img src="church/images/open_instruc_1.png" /><br>
+        <button class="btn btn-info btn-small closeFirstInstructions" style=" margin-top: 25px; width: 180px;">Got it!</button>
+      </div>
+    </div>
+    <ion-pane>
+      <ion-header-bar class="bar-stable pageHead">
+        <h1 class="title pageTitle">Ionic Blank Starter</h1>
+      </ion-header-bar>
+      <ion-nav-view class="view-container "></ion-nav-view>
+    </ion-pane>
+    
+  </div>
+
+</body>
+
+</html>

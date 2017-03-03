@@ -1,0 +1,416 @@
+/* THIS CSS FILE IS FOR CRC LONDON ONLY */
+
+body{
+}
+#menu-logged-in, #bottom-bar-cont{
+	background-color: #161616;
+}
+.chevvy{
+	color: #5F5F5F;
+}
+
+/*Fix bug where social feed won't scroll*/
+#socialfeed-container{
+	touch-action:inherit!important;
+}
+
+/*Fix bug where ticketing page won't scroll */
+#showTicketsHere{
+	touch-action:inherit!important;
+}
+
+/*Homepage*/
+#homeScroll .paddedContent{
+	background-color:#161616!important;
+}
+
+#homeScroll{
+        background-color:#161616!important;
+}
+
+.text-info{
+	color:#5F5F5F!important;
+}
+
+/*Remove Whats new button*/
+.loggedOutSide:nth-of-type(1){
+	display:none;
+}
+
+.loggedOutSide:nth-of-type(2){
+	width:100%;
+}
+
+/*Whatson*/
+.calArr i{
+	font-size:20pt!important;
+}
+
+/*Podcasts*/
+.podcastPlayer{
+	background-color:#5F5F5F!important;
+	color:#CACACA!important;
+}
+
+.podcastStreamFull{
+	color: white!important;
+	background-color: #5F5F5F!important;
+}
+
+/*Hide The Welcome Message*/
+.welcome_message{
+	display:none;
+}
+
+/*Whatson notifications*/
+.groupNotification i.fa{
+	color: white!important;
+}
+.rotaNotification i.fa{
+	color: white!important;
+}
+.birthdayNotification i.fa{
+	color: white!important;
+}
+.eventNotification i.fa{
+	color: white!important;
+}
+
+.notificationOptButton button{
+	color: #161616!important;
+}
+.notificationOptButton button:focus{
+	color: #161616!important;
+}
+
+.chooseNotificationOpt.showing, .chooseNotificationOpt.showing:focus, .chooseNotificationOpt.showing:active{
+	background-color: #5F5F5F!important;
+	color: #161616!important;
+}
+.chooseNotificationOpt.notshowing, .chooseNotificationOpt.notshowing:focus, .chooseNotificationOpt.notshowing:active{
+	background-color: #CACACA!important;
+	color: #161616!important;
+}
+i.fa.notificationIcon{
+	color: black;
+}
+
+.btn-success{
+	background-color: #575757!important;
+	border-color: #575757!important;	
+}
+.btn-warning{
+        background-color: #575757!important;
+        border-color: #575757!important;
+}
+.btn-info{
+        background-color: #575757!important;
+        border-color: #575757!important;
+}
+.btn-danger{
+        background-color: #575757!important;
+        border-color: #575757!important;
+}
+
+.alert-success{
+        background-color: #575757!important;
+        border-color: #575757!important;
+}
+.alert-warning{
+        background-color: #575757!important;
+        border-color: #575757!important;
+}
+.alert-info{
+        background-color: #575757!important;
+        border-color: #575757!important;
+}
+/*Hide Giving Page*/
+li[data-load='give']{
+	display:none!important;
+}
+
+.loggedInIcon{
+}
+.myOptions li .loggedInIcon .optionIcon{
+	color: #5F5F5F;
+}
+.myOptions li.active .loggedInIcon .optionIcon{
+	color: #CACACA;
+}
+.myOptions li .optionText{
+	color: #5F5F5F;
+	text-decoration: none;
+	font-weight: normal;
+}
+#topMenuPull{
+	background-image: url('images/panel-bg.jpg');
+}
+.pageHead{
+	background-color: #161616;
+}
+.pageHead .pageTitle, .pageHead .altTitleBar{
+	font-weight: normal;
+	color: #5F5F5F;
+	font-size: 15pt;
+	/*text-transform:uppercase;*/
+}
+.panelText{
+	text-decoration: none;
+	text-shadow: 0 1px 0 #000000;
+}
+.calDateBox, .calDateTitle{
+	-webkit-box-shadow: inset 0 0 1px #393939 ;
+	background-color: #fff;
+}
+.calDateBox.events1{
+	background-color: #f5ff89;
+}
+.calDateBox.events2{
+	background-color: #ffe989;
+}
+.calDateBox.events3{
+	background-color: #ffd389;
+}
+.calDateBox.events4{
+	background-color: #ffba89;
+}
+.calDateBox.events5{
+	background-color: #ff8f44; 
+}
+.calDateBox.events6{
+	background-color: #ff812d; 
+}
+.calDateBox.events7{
+	background-color: #ff7a63; 
+}
+.calDateBox.events8{
+	background-color: #ff5f47; 
+}
+.calDateBox.events9{
+	background-color: #ff1d00; 
+}
+.calDateTitle{
+	background-color: #cccccc;
+}
+.calDateBox.deactive{
+	background-color: #e4e4e4;
+	color: #b8b8b8;
+}
+.calDateBox.selected{
+	background: -webkit-linear-gradient(top, rgba(83,193,237,1) 0%,rgba(26,117,191,1) 100%); 
+	color:#d8d8d8;
+}
+.calArr{
+	box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
+	background-color: #aeaeae;
+	-webkit-box-shadow: 0 0 1px #000000; 
+	border-color: rgba(77,77,77,0.81);
+}
+.calArrBtnIn{
+	background-color: #222;
+}
+.calendarTop{
+	background-color: #aaa;
+}
+.nts{
+	font-size: 9pt;
+	color: #414141;
+	font-style: italic;
+	padding: 5px;
+	font-weight: normal;
+}
+.rowLink{
+	color: #3d3d3d;
+	font-size: 11pt;
+	font-weight: bold;
+	background: -webkit-linear-gradient(top, #ffffff 0%,#dbdbdb 99%,#9b9b9b 99%,#969696 100%);
+}
+.fadedOut{
+	display: inline-block;
+	width: 75px;
+	padding-right: 6px;
+	text-align: right;
+	font-weight: normal;
+	color: #626262
+}
+#notificationsContainer{
+	background-color:#F3F3F3;
+	min-height: 100%;
+}
+.notificationCont{
+	overflow: hidden;
+	position: relative;
+	-webkit-transition: all 0.3s ease;
+}
+.notificationCont.showing{
+	height: 70px;
+	opacity: 1;
+}
+.notificationCont.notshowing{
+	height: 0px;
+	opacity: 0;
+}
+.notification{
+	height: 60px;
+	margin: 10px;
+	margin-bottom: 0px;
+	-webkit-border-radius: 4px;
+	background-color: #555C70;
+	color: #fff;
+	position: relative;
+}
+.noteIcon{
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	bottom: 5px;
+	width: 50px;
+	line-height: 50px;
+	height: 50px;
+	text-align: center;
+	font-size: 28pt;
+	color: #fff;
+}
+.noteTitle{
+	position: absolute;
+	left: 60px;
+	right: 60px;
+	top: 5px;
+	height: 22.5px;
+	font-weight: bold;
+	line-height: 22.5px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.noteDescription{
+	position: absolute;
+	left: 60px;
+	right: 60px;
+	height: 14px;
+	bottom: 20px;
+	font-size: 8pt;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.noteDate{
+	position: absolute;
+	left: 60px;
+	right: 60px;
+	height: 14px;
+	bottom: 2px;
+	font-size: 8pt;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.noteDays{
+	position: absolute;
+	right: 5px;
+	width: 50px;
+	top: 3px;
+	bottom: 18px;
+	line-height: 39px;
+	height: 36px;
+	text-align: center;
+	font-size: 26pt;
+	font-weight: bolder;
+}
+.noteDaysLabel{
+	position: absolute;
+	right: 5px;
+	width: 50px;
+	top: 42px;
+	bottom: 3px;
+	line-height: 12px;
+	height: 12px;
+	text-align: center;
+	font-size: 7pt;
+	font-weight: bolder;
+}
+.pageTopMenuOpen{
+	border-radius: 4px;
+	border: 1px solid #F0F0F0;
+	-webkit-box-shadow: inset 0 0 3px #212121, 0px 0px 6px #212121;
+	color: #F0F0F0;
+	float: right;
+	position: absolute;
+	top: 7px;
+	right: 10px;
+	height: 26px;
+	width: 26px;
+	border-radius: 13px;
+	text-align: center;
+	line-height: 26px;
+	color: #E1E1E1;
+}
+.appmod{
+	border-radius: 2px;
+	background-color: #DBDBDB;
+	margin: 3px 0;
+	padding: 0 1px 1px 1px; 
+}
+.appmod-primary{
+	background-color: white;
+}
+.appmod-info{
+        background-color: white;
+}
+.appmod .appmod-heading{
+	border-bottom: 2px solid white;
+}
+.appmod-primary .appmod-heading{
+	border-bottom: 2px solid white;
+}
+.appmod-warning .appmod-heading{
+	border-bottom: 2px solid white;
+}
+.appmod-danger .appmod-heading{
+	border-bottom: 2px solid white;
+}
+.appmod-info .appmod-heading{
+	border-bottom: 2px solid white;
+}
+.appmod-success .appmod-heading{
+	border-bottom: 2px solid #379703;
+}
+.appmod-default{
+	background-color: #D4D4D4;
+}.
+.appmod-warning{
+	background-color: #D4D4D4;
+}
+.appmod-danger{
+	background-color: #D4D4D4;
+}
+.appmod-info{
+	background-color: #D4D4D4;
+}
+.appmod-success{
+	background-color: #D4D4D4;
+}
+.appmod .appmod-heading{
+	margin: 4px, 0, 4px, 4px;
+}
+.appmod .appmod-heading .appmod-title{
+	padding: 5px;
+	margin: 1px;
+	font-size: 20pt;
+	color: #555555;
+	text-align:center;
+}
+.appmod-title{
+/*	text-shadow: 1px 1px 1px rgba(0,0,0,0.3); */
+}
+.appmod .appmod-body{
+	background-color: #fff;
+	padding: 4px;
+	font-size: 12pt;
+	color: #2F2F2F;
+	border-bottom-right-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+div.list-group{
+	margin: 0px;
+}
