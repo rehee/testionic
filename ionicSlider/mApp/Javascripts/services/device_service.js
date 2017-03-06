@@ -1,16 +1,20 @@
 
 (function () {
-    angular.module('app').factory('deviceService',[deviceService]);
-    function deviceService(){
+    angular.module('app').factory('deviceService', ['$timeout', '$window', deviceService]);
+    function deviceService($timeout, $window) {
         var device = null;
         var realDevice = false;
-        function initDevice(realDevice,deviceInfo){
-            this.realDevice=realDevice;
-            this.device=deviceInfo;
+        function initDevice(realDevice, deviceInfo) {
+            this.realDevice = realDevice;
+            this.device = deviceInfo;
         }
-        return{
-            device:device,
-            initDevice:initDevice
+        let width = function (){
+            return $window.innerWidth;
+        }
+        return {
+            device: device,
+            initDevice: initDevice,
+            width: width
         }
 
     }

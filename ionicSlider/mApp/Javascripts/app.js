@@ -5,10 +5,15 @@
 // the 2nd parameter is an array of 'requires'
 // require('./lib/ionic/js/ionic.bundle.js');
 // require('iscroll');
+ require('jquery');
+// require('bootstrap');
 require('ng-iscroll');
-var app = angular.module('app', ['ionic','ng-iscroll']);
-require('./services/church_service.js')
-require('./services/device_service.js')
+require('hammerjs');
+require('angular-hammer');
+var app = angular.module('app', ['ionic', 'ng-iscroll','hmTouchEvents']);
+require('./services/church_service.js');
+require('./services/device_service.js');
+require('./directives/iscroll.js');
 app.run(function ($ionicPlatform, churchService, deviceService) {
   $ionicPlatform.ready(function () {
     if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -21,22 +26,22 @@ app.run(function ($ionicPlatform, churchService, deviceService) {
       // a much nicer keyboard experience.
       cordova.plugins.Keyboard.disableScroll(true);
     }
-    if (typeof(device)!='undefined') {
-      deviceService.initDevice(true,device);
+    if (typeof (device) != 'undefined') {
+      deviceService.initDevice(true, device);
 
     } else {
       let device = {
-        avaliable:true,
-        platform:'Android',
-        version:'6.0.',
-        uuid:'c9ba08b93c1bc08',
-        cordova:'6.1.2',
-        model:'Nexus 7',
-        manufacturer:'asus',
-        isVirtual:'true',
-        serial:'0793a2f4'
+        avaliable: true,
+        platform: 'Android',
+        version: '6.0.',
+        uuid: 'c9ba08b93c1bc08',
+        cordova: '6.1.2',
+        model: 'Nexus 7',
+        manufacturer: 'asus',
+        isVirtual: 'true',
+        serial: '0793a2f4'
       };
-      deviceService.initDevice(false,device);
+      deviceService.initDevice(false, device);
     }
     if (window.StatusBar) {
       StatusBar.styleDefault();

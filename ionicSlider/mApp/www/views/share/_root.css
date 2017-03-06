@@ -1,0 +1,17 @@
+#iscroller {
+        display: inline-block;
+        width: auto;
+    }
+
+    .text-width {
+        width: 150px;
+    }
+
+    .tfl-overflow {
+        overflow: hidden !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #iscrollwrapper {
+        width: 100%;
+    }
