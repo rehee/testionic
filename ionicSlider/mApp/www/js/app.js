@@ -16,11 +16,14 @@ webpackJsonp([0,1],[
 	__webpack_require__(2);
 	__webpack_require__(3);
 	__webpack_require__(4);
-	var app = angular.module('app', ['ionic', 'ng-iscroll', 'hmTouchEvents']);
+	__webpack_require__(16);
+	var app = angular.module('app', ['ionic', 'ng-iscroll', 'hmTouchEvents', 'LocalStorageModule']);
 	__webpack_require__(8);
 	__webpack_require__(10);
 	__webpack_require__(11);
-	app.run(function ($ionicPlatform, churchService, deviceService) {
+	__webpack_require__(14);
+	__webpack_require__(19);
+	app.run(function ($ionicPlatform, churchService, deviceService, layoutService) {
 	  $ionicPlatform.ready(function () {
 	    if (window.cordova && window.cordova.plugins.Keyboard) {
 	      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -35,7 +38,7 @@ webpackJsonp([0,1],[
 	    if (typeof device != 'undefined') {
 	      deviceService.initDevice(true, device);
 	    } else {
-	      var _device = {
+	      var thisDevice = {
 	        avaliable: true,
 	        platform: 'Android',
 	        version: '6.0.',
@@ -46,17 +49,18 @@ webpackJsonp([0,1],[
 	        isVirtual: 'true',
 	        serial: '0793a2f4'
 	      };
-	      deviceService.initDevice(false, _device);
+
+	      deviceService.initDevice(false, thisDevice);
 	    }
 	    if (window.StatusBar) {
 	      StatusBar.styleDefault();
 	    }
-	    console.log(churchService.church.init.menu.public);
+	    layoutService.layout.title = churchService.church.name;
 	  });
 	});
-
+	__webpack_require__(18);
 	__webpack_require__(12);
-
+	__webpack_require__(15);
 	__webpack_require__(13);
 
 /***/ },
@@ -46944,19 +46948,51 @@ webpackJsonp([0,1],[
 	(function () {
 	    angular.module('app').factory('deviceService', ['$timeout', '$window', deviceService]);
 	    function deviceService($timeout, $window) {
-	        var device = null;
+	        var thisDevice = {
+	            avaliable: true,
+	            platform: '',
+	            version: '',
+	            uuid: '',
+	            cordova: '',
+	            model: '',
+	            manufacturer: '',
+	            isVirtual: '',
+	            serial: ''
+	        };
 	        var realDevice = false;
 	        function initDevice(realDevice, deviceInfo) {
-	            this.realDevice = realDevice;
-	            this.device = deviceInfo;
+	            realDevice = realDevice;
+	            thisDevice.avaliable = deviceInfo.avaliable;
+	            thisDevice.platform = deviceInfo.platform;
+	            thisDevice.platform = deviceInfo.platform;
+	            thisDevice.version = deviceInfo.version;
+	            thisDevice.uuid = deviceInfo.uuid;
+	            thisDevice.cordova = deviceInfo.cordova;
+	            thisDevice.model = deviceInfo.model;
+	            thisDevice.manufacturer = deviceInfo.manufacturer;
+	            thisDevice.isVirtual = deviceInfo.isVirtual;
+	            thisDevice.serial = deviceInfo.serial;
 	        }
 	        var width = function width() {
 	            return $window.innerWidth;
 	        };
+	        var getWhoami = function getWhoami() {
+	            var whoami = {};
+	            if (thisDevice) {
+	                whoami['device_model'] = thisDevice.model;
+	                whoami['device_platform'] = thisDevice.platform;
+	                whoami['device_version'] = thisDevice.version;
+	                whoami['uuid'] = thisDevice.uuid;
+	                whoami['device_ptoken'] = '';
+	            }
+	            return whoami;
+	        };
+
 	        return {
-	            device: device,
+	            device: thisDevice,
 	            initDevice: initDevice,
-	            width: width
+	            width: width,
+	            getWhoami: getWhoami
 	        };
 	    }
 	})();
@@ -46968,13 +47004,12 @@ webpackJsonp([0,1],[
 	'use strict';
 
 	angular.module("app").directive('iscrollDirective', iscrollDirective);
-	iscrollDirective.$inject = ['$timeout'];
-	function iscrollDirective($timeout) {
+	iscrollDirective.$inject = ['$timeout', '$interval', 'contentService'];
+	function iscrollDirective($timeout, $interval, contentService) {
 	    return {
 	        restrict: 'A',
 	        link: function link($scope, element, attrs) {
-	            $timeout(function () {
-	                console.log('#' + element.attr('id'));
+	            function refeesh() {
 	                var iscrollwrapper = new IScroll('#' + element.attr('id'), {
 	                    scrollX: true,
 	                    scrollY: false,
@@ -46985,7 +47020,17 @@ webpackJsonp([0,1],[
 	                    eventPassthrough: true
 	                });
 	                iscrollwrapper.refresh();
-	            });
+	            };
+	            $timeout(refeesh);
+	            var lastStatus = contentService.userInfo.isLogin;
+	            $interval(function () {
+	                var currentStatus = contentService.userInfo.isLogin;
+	                if (lastStatus != currentStatus) {
+	                    alert("change");
+	                    lastStatus = currentStatus;
+	                    refeesh();
+	                }
+	            }, 100);
 	        }
 	    };
 	};
@@ -46997,21 +47042,39 @@ webpackJsonp([0,1],[
 	'use strict';
 
 	(function () {
-	    angular.module('app').controller('shareCtl', ['$scope', '$log', '$state', 'churchService', 'deviceService', '$window', '$timeout', shareCtl]);
-	    function shareCtl($scope, $log, $state, churchService, deviceService, $window, $timeout) {
+	    angular.module('app').controller('shareCtl', ['$scope', '$log', '$state', 'churchService', 'deviceService', '$window', '$timeout', 'layoutService', 'contentService', 'localStorageService', shareCtl]);
+	    function shareCtl($scope, $log, $state, churchService, deviceService, $window, $timeout, layoutService, contentService, localStorageService) {
 	        var vm = this;
-	        vm.menus = churchService.church.init.menu.public;
+	        vm.menus = contentService.menus;
+	        vm.user = contentService.userInfo;
+	        console.log(vm.menus);
+	        console.log('--');
 	        vm.width = deviceService.width();
 	        vm.c = function () {
 	            alert();
 	        };
+	        vm.layout = layoutService.layout;
+	        try {
+	            var timeNow = new Date().getTime();
+	            var timeSpend = timeNow - localStorageService.get('lastUpdated');
+	            if (!localStorageService.get('lastUpdated') || isNaN(timeSpend) || timeSpend > 600000) {
+	                contentService.refreshContent().then(function (response) {
+	                    console.log('new content');
+	                }, function () {
+	                    console.log('-');
+	                });
+	            }
+	        } catch (e) {
+	            console.log(e);
+	        }
+
 	        $window.onresize = function (event) {
 	            $timeout(function () {
 	                vm.width = deviceService.width();
 	            });
 	        };
 	        vm.textClass = 'no_height';
-	        vm.onHammer = function (event) {
+	        vm.onHammer = function (event, index) {
 	            if (event == 'start') {
 	                vm.textClass = '';
 	            } else if (event == 'finish') {
@@ -47020,7 +47083,20 @@ webpackJsonp([0,1],[
 	                vm.textClass = '';
 	                $timeout(function () {
 	                    vm.textClass = 'no_height';
-	                }, 2);
+	                });
+	                console.log('logout');
+	                $state.go('home.' + vm.menus[index].href);
+	                try {
+	                    for (var i = 0; i < vm.menus.length; i++) {
+	                        if (i == index) {
+	                            vm.menus[i].tabActive = "active";
+	                        } else {
+	                            vm.menus[i].tabActive = "";
+	                        }
+	                    }
+	                } catch (e) {
+	                    console.log(e);
+	                }
 	            }
 	        };
 	    }
@@ -47034,12 +47110,931 @@ webpackJsonp([0,1],[
 
 	(function () {
 	    angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
+
 	        $stateProvider.state('home', {
 	            url: '/home',
-	            templateUrl: '../views/share/_root.html'
+	            templateUrl: 'views/share/_root.html'
+	        }).state('home.home', {
+	            url: '/home',
+	            views: {
+	                'body': {
+	                    templateUrl: 'views/home/home.html'
+	                }
+	            }
+	        }).state('home.logout', {
+	            url: '/home',
+	            views: {
+	                'body': {
+	                    templateUrl: function templateUrl() {
+
+	                        return 'views/home/home.html';
+	                    },
+	                    controller: function controller(contentService) {
+	                        contentService.logout().then(function () {
+	                            console.log('logout');
+	                        });
+	                    }
+	                }
+	            }
 	        });
-	        $urlRouterProvider.otherwise('/home');
+	        $urlRouterProvider.otherwise('/home/home');
 	    });
+	})();
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	__webpack_require__(5);
+	(function () {
+	    angular.module('app').factory('layoutService', [layoutService]);
+	    function layoutService() {
+	        var layout = {
+	            title: 'app'
+	        };
+
+	        return {
+	            layout: layout
+	        };
+	    }
+	})();
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	__webpack_require__(5);
+	(function () {
+	    angular.module('app').controller('homeCtl', ['layoutService', 'contentService', 'deviceService', homeCtl]);
+	    function homeCtl(layoutService, contentService, deviceService) {
+	        layoutService.layout.title = 'HOME';
+
+	        var vm = this;
+	        vm.isLoading = false;
+	        vm.content = contentService.getContent('home');
+	        vm.refresh = function () {
+	            refreshContent();
+	        };
+	        vm.loginModule = {
+	            userEmail: '',
+	            userPass: ''
+	        };
+	        vm.user = contentService.userInfo;
+	        vm.login = function () {
+	            contentService.userLogin(vm.loginModule).then(function () {
+	                vm.loginMark = "";
+	            }, function () {
+	                console.log('error');
+	            });
+	        };
+	        vm.getImageHeight = function (height) {
+	            var calc_width = parseInt(deviceService.width() - 20);
+	            var calc_height = calc_width / parseFloat(height);
+	            return calc_height;
+	        };
+	        vm.loginMark = "";
+	        vm.showLogin = function (isShowing) {
+	            if (isShowing) {
+	                vm.loginMark = "show";
+	            } else {
+	                vm.loginMark = "";
+	            }
+	        };
+
+	        function refreshContent() {
+	            vm.isLoading = true;
+	            contentService.refreshContent().then(function () {
+	                vm.isLoading = false;
+	                vm.content = contentService.getContent('home');
+	                console.log(vm.content);
+	            }, function () {
+	                vm.isLoading = false;
+	            });
+	        }
+	        if (!vm.content) {
+	            refreshContent();
+	        }
+	        console.log(vm.content);
+	    }
+	})();
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(17);
+	module.exports = 'LocalStorageModule';
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	/**
+	 * An Angular module that gives you access to the browsers local storage
+	 * @version v0.5.2 - 2016-09-28
+	 * @link https://github.com/grevory/angular-local-storage
+	 * @author grevory <greg@gregpike.ca>
+	 * @license MIT License, http://www.opensource.org/licenses/MIT
+	 */
+	(function (window, angular) {
+	var isDefined = angular.isDefined,
+	  isUndefined = angular.isUndefined,
+	  isNumber = angular.isNumber,
+	  isObject = angular.isObject,
+	  isArray = angular.isArray,
+	  isString = angular.isString,
+	  extend = angular.extend,
+	  toJson = angular.toJson;
+
+	angular
+	  .module('LocalStorageModule', [])
+	  .provider('localStorageService', function() {
+	    // You should set a prefix to avoid overwriting any local storage variables from the rest of your app
+	    // e.g. localStorageServiceProvider.setPrefix('yourAppName');
+	    // With provider you can use config as this:
+	    // myApp.config(function (localStorageServiceProvider) {
+	    //    localStorageServiceProvider.prefix = 'yourAppName';
+	    // });
+	    this.prefix = 'ls';
+
+	    // You could change web storage type localstorage or sessionStorage
+	    this.storageType = 'localStorage';
+
+	    // Cookie options (usually in case of fallback)
+	    // expiry = Number of days before cookies expire // 0 = Does not expire
+	    // path = The web path the cookie represents
+	    // secure = Wether the cookies should be secure (i.e only sent on HTTPS requests)
+	    this.cookie = {
+	      expiry: 30,
+	      path: '/',
+	      secure: false
+	    };
+
+	    // Decides wether we should default to cookies if localstorage is not supported.
+	    this.defaultToCookie = true;
+
+	    // Send signals for each of the following actions?
+	    this.notify = {
+	      setItem: true,
+	      removeItem: false
+	    };
+
+	    // Setter for the prefix
+	    this.setPrefix = function(prefix) {
+	      this.prefix = prefix;
+	      return this;
+	    };
+
+	    // Setter for the storageType
+	    this.setStorageType = function(storageType) {
+	      this.storageType = storageType;
+	      return this;
+	    };
+	    // Setter for defaultToCookie value, default is true.
+	    this.setDefaultToCookie = function (shouldDefault) {
+	      this.defaultToCookie = !!shouldDefault; // Double-not to make sure it's a bool value.
+	      return this;
+	    };
+	    // Setter for cookie config
+	    this.setStorageCookie = function(exp, path, secure) {
+	      this.cookie.expiry = exp;
+	      this.cookie.path = path;
+	      this.cookie.secure = secure;
+	      return this;
+	    };
+
+	    // Setter for cookie domain
+	    this.setStorageCookieDomain = function(domain) {
+	      this.cookie.domain = domain;
+	      return this;
+	    };
+
+	    // Setter for notification config
+	    // itemSet & itemRemove should be booleans
+	    this.setNotify = function(itemSet, itemRemove) {
+	      this.notify = {
+	        setItem: itemSet,
+	        removeItem: itemRemove
+	      };
+	      return this;
+	    };
+
+	    this.$get = ['$rootScope', '$window', '$document', '$parse','$timeout', function($rootScope, $window, $document, $parse, $timeout) {
+	      var self = this;
+	      var prefix = self.prefix;
+	      var cookie = self.cookie;
+	      var notify = self.notify;
+	      var storageType = self.storageType;
+	      var webStorage;
+
+	      // When Angular's $document is not available
+	      if (!$document) {
+	        $document = document;
+	      } else if ($document[0]) {
+	        $document = $document[0];
+	      }
+
+	      // If there is a prefix set in the config lets use that with an appended period for readability
+	      if (prefix.substr(-1) !== '.') {
+	        prefix = !!prefix ? prefix + '.' : '';
+	      }
+	      var deriveQualifiedKey = function(key) {
+	        return prefix + key;
+	      };
+
+	      // Removes prefix from the key.
+	      var underiveQualifiedKey = function (key) {
+	        return key.replace(new RegExp('^' + prefix, 'g'), '');
+	      };
+
+	      // Check if the key is within our prefix namespace.
+	      var isKeyPrefixOurs = function (key) {
+	        return key.indexOf(prefix) === 0;
+	      };
+
+	      // Checks the browser to see if local storage is supported
+	      var checkSupport = function () {
+	        try {
+	          var supported = (storageType in $window && $window[storageType] !== null);
+
+	          // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
+	          // is available, but trying to call .setItem throws an exception.
+	          //
+	          // "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to add something to storage
+	          // that exceeded the quota."
+	          var key = deriveQualifiedKey('__' + Math.round(Math.random() * 1e7));
+	          if (supported) {
+	            webStorage = $window[storageType];
+	            webStorage.setItem(key, '');
+	            webStorage.removeItem(key);
+	          }
+
+	          return supported;
+	        } catch (e) {
+	          // Only change storageType to cookies if defaulting is enabled.
+	          if (self.defaultToCookie)
+	            storageType = 'cookie';
+	          $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+	          return false;
+	        }
+	      };
+	      var browserSupportsLocalStorage = checkSupport();
+
+	      // Directly adds a value to local storage
+	      // If local storage is not available in the browser use cookies
+	      // Example use: localStorageService.add('library','angular');
+	      var addToLocalStorage = function (key, value, type) {
+	        setStorageType(type);
+
+	        // Let's convert undefined values to null to get the value consistent
+	        if (isUndefined(value)) {
+	          value = null;
+	        } else {
+	          value = toJson(value);
+	        }
+
+	        // If this browser does not support local storage use cookies
+	        if (!browserSupportsLocalStorage && self.defaultToCookie || self.storageType === 'cookie') {
+	          if (!browserSupportsLocalStorage) {
+	            $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+	          }
+
+	          if (notify.setItem) {
+	            $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: 'cookie'});
+	          }
+	          return addToCookies(key, value);
+	        }
+
+	        try {
+	          if (webStorage) {
+	            webStorage.setItem(deriveQualifiedKey(key), value);
+	          }
+	          if (notify.setItem) {
+	            $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: self.storageType});
+	          }
+	        } catch (e) {
+	          $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+	          return addToCookies(key, value);
+	        }
+	        return true;
+	      };
+
+	      // Directly get a value from local storage
+	      // Example use: localStorageService.get('library'); // returns 'angular'
+	      var getFromLocalStorage = function (key, type) {
+	        setStorageType(type);
+
+	        if (!browserSupportsLocalStorage && self.defaultToCookie  || self.storageType === 'cookie') {
+	          if (!browserSupportsLocalStorage) {
+	            $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+	          }
+
+	          return getFromCookies(key);
+	        }
+
+	        var item = webStorage ? webStorage.getItem(deriveQualifiedKey(key)) : null;
+	        // angular.toJson will convert null to 'null', so a proper conversion is needed
+	        // FIXME not a perfect solution, since a valid 'null' string can't be stored
+	        if (!item || item === 'null') {
+	          return null;
+	        }
+
+	        try {
+	          return JSON.parse(item);
+	        } catch (e) {
+	          return item;
+	        }
+	      };
+
+	      // Remove an item from local storage
+	      // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
+	      //
+	      // This is var-arg removal, check the last argument to see if it is a storageType
+	      // and set type accordingly before removing.
+	      //
+	      var removeFromLocalStorage = function () {
+	        // can't pop on arguments, so we do this
+	        var consumed = 0;
+	        if (arguments.length >= 1 &&
+	            (arguments[arguments.length - 1] === 'localStorage' ||
+	             arguments[arguments.length - 1] === 'sessionStorage')) {
+	          consumed = 1;
+	          setStorageType(arguments[arguments.length - 1]);
+	        }
+
+	        var i, key;
+	        for (i = 0; i < arguments.length - consumed; i++) {
+	          key = arguments[i];
+	          if (!browserSupportsLocalStorage && self.defaultToCookie || self.storageType === 'cookie') {
+	            if (!browserSupportsLocalStorage) {
+	              $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+	            }
+
+	            if (notify.removeItem) {
+	              $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {key: key, storageType: 'cookie'});
+	            }
+	            removeFromCookies(key);
+	          }
+	          else {
+	            try {
+	              webStorage.removeItem(deriveQualifiedKey(key));
+	              if (notify.removeItem) {
+	                $rootScope.$broadcast('LocalStorageModule.notification.removeitem', {
+	                  key: key,
+	                  storageType: self.storageType
+	                });
+	              }
+	            } catch (e) {
+	              $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+	              removeFromCookies(key);
+	            }
+	          }
+	        }
+	      };
+
+	      // Return array of keys for local storage
+	      // Example use: var keys = localStorageService.keys()
+	      var getKeysForLocalStorage = function (type) {
+	        setStorageType(type);
+
+	        if (!browserSupportsLocalStorage) {
+	          $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+	          return [];
+	        }
+
+	        var prefixLength = prefix.length;
+	        var keys = [];
+	        for (var key in webStorage) {
+	          // Only return keys that are for this app
+	          if (key.substr(0, prefixLength) === prefix) {
+	            try {
+	              keys.push(key.substr(prefixLength));
+	            } catch (e) {
+	              $rootScope.$broadcast('LocalStorageModule.notification.error', e.Description);
+	              return [];
+	            }
+	          }
+	        }
+	        return keys;
+	      };
+
+	      // Remove all data for this app from local storage
+	      // Also optionally takes a regular expression string and removes the matching key-value pairs
+	      // Example use: localStorageService.clearAll();
+	      // Should be used mostly for development purposes
+	      var clearAllFromLocalStorage = function (regularExpression, type) {
+	        setStorageType(type);
+
+	        // Setting both regular expressions independently
+	        // Empty strings result in catchall RegExp
+	        var prefixRegex = !!prefix ? new RegExp('^' + prefix) : new RegExp();
+	        var testRegex = !!regularExpression ? new RegExp(regularExpression) : new RegExp();
+
+	        if (!browserSupportsLocalStorage && self.defaultToCookie  || self.storageType === 'cookie') {
+	          if (!browserSupportsLocalStorage) {
+	            $rootScope.$broadcast('LocalStorageModule.notification.warning', 'LOCAL_STORAGE_NOT_SUPPORTED');
+	          }
+	          return clearAllFromCookies();
+	        }
+	        if (!browserSupportsLocalStorage && !self.defaultToCookie)
+	          return false;
+	        var prefixLength = prefix.length;
+
+	        for (var key in webStorage) {
+	          // Only remove items that are for this app and match the regular expression
+	          if (prefixRegex.test(key) && testRegex.test(key.substr(prefixLength))) {
+	            try {
+	              removeFromLocalStorage(key.substr(prefixLength));
+	            } catch (e) {
+	              $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+	              return clearAllFromCookies();
+	            }
+	          }
+	        }
+	        return true;
+	      };
+
+	      // Checks the browser to see if cookies are supported
+	      var browserSupportsCookies = (function() {
+	        try {
+	          return $window.navigator.cookieEnabled ||
+	          ("cookie" in $document && ($document.cookie.length > 0 ||
+	            ($document.cookie = "test").indexOf.call($document.cookie, "test") > -1));
+	          } catch (e) {
+	            $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+	            return false;
+	          }
+	        }());
+
+	        // Directly adds a value to cookies
+	        // Typically used as a fallback if local storage is not available in the browser
+	        // Example use: localStorageService.cookie.add('library','angular');
+	        var addToCookies = function (key, value, daysToExpiry, secure) {
+
+	          if (isUndefined(value)) {
+	            return false;
+	          } else if(isArray(value) || isObject(value)) {
+	            value = toJson(value);
+	          }
+
+	          if (!browserSupportsCookies) {
+	            $rootScope.$broadcast('LocalStorageModule.notification.error', 'COOKIES_NOT_SUPPORTED');
+	            return false;
+	          }
+
+	          try {
+	            var expiry = '',
+	            expiryDate = new Date(),
+	            cookieDomain = '';
+
+	            if (value === null) {
+	              // Mark that the cookie has expired one day ago
+	              expiryDate.setTime(expiryDate.getTime() + (-1 * 24 * 60 * 60 * 1000));
+	              expiry = "; expires=" + expiryDate.toGMTString();
+	              value = '';
+	            } else if (isNumber(daysToExpiry) && daysToExpiry !== 0) {
+	              expiryDate.setTime(expiryDate.getTime() + (daysToExpiry * 24 * 60 * 60 * 1000));
+	              expiry = "; expires=" + expiryDate.toGMTString();
+	            } else if (cookie.expiry !== 0) {
+	              expiryDate.setTime(expiryDate.getTime() + (cookie.expiry * 24 * 60 * 60 * 1000));
+	              expiry = "; expires=" + expiryDate.toGMTString();
+	            }
+	            if (!!key) {
+	              var cookiePath = "; path=" + cookie.path;
+	              if (cookie.domain) {
+	                cookieDomain = "; domain=" + cookie.domain;
+	              }
+	              /* Providing the secure parameter always takes precedence over config
+	               * (allows developer to mix and match secure + non-secure) */
+	              if (typeof secure === 'boolean') {
+	                  if (secure === true) {
+	                      /* We've explicitly specified secure,
+	                       * add the secure attribute to the cookie (after domain) */
+	                      cookieDomain += "; secure";
+	                  }
+	                  // else - secure has been supplied but isn't true - so don't set secure flag, regardless of what config says
+	              }
+	              else if (cookie.secure === true) {
+	                  // secure parameter wasn't specified, get default from config
+	                  cookieDomain += "; secure";
+	              }
+	              $document.cookie = deriveQualifiedKey(key) + "=" + encodeURIComponent(value) + expiry + cookiePath + cookieDomain;
+	            }
+	          } catch (e) {
+	            $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+	            return false;
+	          }
+	          return true;
+	        };
+
+	        // Directly get a value from a cookie
+	        // Example use: localStorageService.cookie.get('library'); // returns 'angular'
+	        var getFromCookies = function (key) {
+	          if (!browserSupportsCookies) {
+	            $rootScope.$broadcast('LocalStorageModule.notification.error', 'COOKIES_NOT_SUPPORTED');
+	            return false;
+	          }
+
+	          var cookies = $document.cookie && $document.cookie.split(';') || [];
+	          for(var i=0; i < cookies.length; i++) {
+	            var thisCookie = cookies[i];
+	            while (thisCookie.charAt(0) === ' ') {
+	              thisCookie = thisCookie.substring(1,thisCookie.length);
+	            }
+	            if (thisCookie.indexOf(deriveQualifiedKey(key) + '=') === 0) {
+	              var storedValues = decodeURIComponent(thisCookie.substring(prefix.length + key.length + 1, thisCookie.length));
+	              try {
+	                var parsedValue = JSON.parse(storedValues);
+	                return typeof(parsedValue) === 'number' ? storedValues : parsedValue;
+	              } catch(e) {
+	                return storedValues;
+	              }
+	            }
+	          }
+	          return null;
+	        };
+
+	        var removeFromCookies = function (key) {
+	          addToCookies(key,null);
+	        };
+
+	        var clearAllFromCookies = function () {
+	          var thisCookie = null;
+	          var prefixLength = prefix.length;
+	          var cookies = $document.cookie.split(';');
+	          for(var i = 0; i < cookies.length; i++) {
+	            thisCookie = cookies[i];
+
+	            while (thisCookie.charAt(0) === ' ') {
+	              thisCookie = thisCookie.substring(1, thisCookie.length);
+	            }
+
+	            var key = thisCookie.substring(prefixLength, thisCookie.indexOf('='));
+	            removeFromCookies(key);
+	          }
+	        };
+
+	        var getStorageType = function() {
+	          return storageType;
+	        };
+
+	        var setStorageType = function(type) {
+	          if (type && storageType !== type) {
+	            storageType = type;
+	            browserSupportsLocalStorage = checkSupport();
+	          }
+	          return browserSupportsLocalStorage;
+	        };
+
+	        // Add a listener on scope variable to save its changes to local storage
+	        // Return a function which when called cancels binding
+	        var bindToScope = function(scope, key, def, lsKey, type) {
+	          lsKey = lsKey || key;
+	          var value = getFromLocalStorage(lsKey, type);
+
+	          if (value === null && isDefined(def)) {
+	            value = def;
+	          } else if (isObject(value) && isObject(def)) {
+	            value = extend(value, def);
+	          }
+
+	          $parse(key).assign(scope, value);
+
+	          return scope.$watch(key, function(newVal) {
+	            addToLocalStorage(lsKey, newVal, type);
+	          }, isObject(scope[key]));
+	        };
+
+	        // Add listener to local storage, for update callbacks.
+	        if (browserSupportsLocalStorage) {
+	            if ($window.addEventListener) {
+	                $window.addEventListener("storage", handleStorageChangeCallback, false);
+	                $rootScope.$on('$destroy', function() {
+	                    $window.removeEventListener("storage", handleStorageChangeCallback);
+	                });
+	            } else if($window.attachEvent){
+	                // attachEvent and detachEvent are proprietary to IE v6-10
+	                $window.attachEvent("onstorage", handleStorageChangeCallback);
+	                $rootScope.$on('$destroy', function() {
+	                    $window.detachEvent("onstorage", handleStorageChangeCallback);
+	                });
+	            }
+	        }
+
+	        // Callback handler for storage changed.
+	        function handleStorageChangeCallback(e) {
+	            if (!e) { e = $window.event; }
+	            if (notify.setItem) {
+	                if (isString(e.key) && isKeyPrefixOurs(e.key)) {
+	                    var key = underiveQualifiedKey(e.key);
+	                    // Use timeout, to avoid using $rootScope.$apply.
+	                    $timeout(function () {
+	                        $rootScope.$broadcast('LocalStorageModule.notification.changed', { key: key, newvalue: e.newValue, storageType: self.storageType });
+	                    });
+	                }
+	            }
+	        }
+
+	        // Return localStorageService.length
+	        // ignore keys that not owned
+	        var lengthOfLocalStorage = function(type) {
+	          setStorageType(type);
+
+	          var count = 0;
+	          var storage = $window[storageType];
+	          for(var i = 0; i < storage.length; i++) {
+	            if(storage.key(i).indexOf(prefix) === 0 ) {
+	              count++;
+	            }
+	          }
+	          return count;
+	        };
+
+	        return {
+	          isSupported: browserSupportsLocalStorage,
+	          getStorageType: getStorageType,
+	          setStorageType: setStorageType,
+	          set: addToLocalStorage,
+	          add: addToLocalStorage, //DEPRECATED
+	          get: getFromLocalStorage,
+	          keys: getKeysForLocalStorage,
+	          remove: removeFromLocalStorage,
+	          clearAll: clearAllFromLocalStorage,
+	          bind: bindToScope,
+	          deriveKey: deriveQualifiedKey,
+	          underiveKey: underiveQualifiedKey,
+	          length: lengthOfLocalStorage,
+	          defaultToCookie: this.defaultToCookie,
+	          cookie: {
+	            isSupported: browserSupportsCookies,
+	            set: addToCookies,
+	            add: addToCookies, //DEPRECATED
+	            get: getFromCookies,
+	            remove: removeFromCookies,
+	            clearAll: clearAllFromCookies
+	          }
+	        };
+	      }];
+	  });
+	})(window, window.angular);
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var churchInfo = __webpack_require__(9);
+	(function () {
+	    angular.module('app').config(function (localStorageServiceProvider) {
+	        localStorageServiceProvider.setPrefix('ChurchApp' + churchInfo.church().church.name);
+	    });
+	})();
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	__webpack_require__(5);
+	(function () {
+	    angular.module('app').factory('contentService', ['$q', '$http', 'churchService', 'deviceService', 'localStorageService', contentService]);
+	    function contentService($q, $http, churchService, deviceService, localStorageService) {
+	        var baseUrl = churchService.church.init.base_url;
+	        var churchId = churchService.church.init.church_id;
+	        var userInfo = {
+	            userFirstName: localStorageService.get('firstname'),
+	            userLastName: localStorageService.get('lastname'),
+	            userAppId: localStorageService.get('loggedInUser')
+	        };
+	        userInfo.isLogin = !isNaN(userInfo.userAppId) && userInfo.userAppId > 0;
+	        var menus = [];
+	        var menuIScroller = { a: {} };
+
+	        function getMenus(menu) {
+	            menu.splice(0, menu.length);
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+
+	            try {
+	                for (var _iterator = churchService.church.init.menu.public[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var item = _step.value;
+
+	                    if (item.private == false || userInfo.isLogin == true) {
+	                        menu.push(item);
+	                    }
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+	        }
+	        getMenus(menus);
+	        console.log(menus);
+	        // let userFirstName = localStorageService.get('firstname');
+	        // let userLastName = localStorageService.get('lastname');
+	        // let userAppId = localStorageService.get('loggedInUser');
+	        // let userLogin = false;
+
+	        function refreshContent() {
+	            var deferred = $q.defer();
+	            $http({
+	                method: 'POST',
+	                url: baseUrl + '/app/all',
+	                data: deviceService.getWhoami(),
+	                dataType: 'json',
+	                headers: { 'iknow-api-key': localStorageService.get('api_key') }
+	            }).then(function successCallback(response) {
+	                if (response.data.status) {
+	                    localStorageService.set('lastUpdated', new Date().getTime());
+	                    localStorageService.set('api_key', response.data.auth.key);
+	                    //console.log(response.data);
+	                    var _iteratorNormalCompletion2 = true;
+	                    var _didIteratorError2 = false;
+	                    var _iteratorError2 = undefined;
+
+	                    try {
+	                        for (var _iterator2 = Object.entries(response.data.data)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                            var _step2$value = _slicedToArray(_step2.value, 2),
+	                                key = _step2$value[0],
+	                                value = _step2$value[1];
+
+	                            localStorageService.set(key, value);
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError2 = true;
+	                        _iteratorError2 = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                                _iterator2.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError2) {
+	                                throw _iteratorError2;
+	                            }
+	                        }
+	                    }
+
+	                    deferred.resolve(response);
+	                }
+	                deferred.reject();
+	            }, function errorCallback(response) {
+	                deferred.reject();
+	            });
+	            return deferred.promise;
+	        }
+
+	        function userLogin(loginModule) {
+	            if (!localStorageService.get('api_key')) {
+	                refreshContent().then(function () {
+	                    console.log('refresh key');
+	                    userLogin(loginModule);
+	                }, function () {
+	                    console.log('refresh key fail');
+	                });
+	                return;
+	            }
+	            var deferred = $q.defer();
+	            var post = new Object();
+	            post['email'] = loginModule.userEmail;
+	            post['password'] = loginModule.userPass;
+	            $http({
+	                method: 'POST',
+	                url: baseUrl + '/auth/login',
+	                data: post,
+	                dataType: 'json',
+	                headers: { 'iknow-api-key': localStorageService.get('api_key') }
+	            }).then(function successCallback(response) {
+	                if (response.data.auth.status) {
+	                    localStorageService.set('firstname', response.data.data.ppl_fname);
+	                    localStorageService.set('lastname', response.data.data.ppl_sname);
+	                    localStorageService.set('loggedInUser', response.data.data.ppl_id);
+
+	                    userInfo.userFirstName = localStorageService.get('firstname');
+	                    userInfo.userLastName = localStorageService.get('lastname');
+	                    userInfo.userAppId = localStorageService.get('loggedInUser');
+	                    userInfo.isLogin = true;
+	                    var _iteratorNormalCompletion3 = true;
+	                    var _didIteratorError3 = false;
+	                    var _iteratorError3 = undefined;
+
+	                    try {
+	                        for (var _iterator3 = menus[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                            var item = _step3.value;
+
+	                            item.displayMenu = true;
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError3 = true;
+	                        _iteratorError3 = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                                _iterator3.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError3) {
+	                                throw _iteratorError3;
+	                            }
+	                        }
+	                    }
+
+	                    getMenus(menus);
+	                    refreshContent().then(function () {
+	                        console.log('refresh content');
+	                    }, function () {
+	                        console.log('refresh content fail');
+	                    });
+	                    deferred.resolve();
+	                }
+	                deferred.reject(response);
+	            }, function errorCallback(response) {
+	                deferred.reject();
+	            });
+
+	            return deferred.promise;
+	        }
+
+	        function logout() {
+	            menus[0].tabActive = "active";
+	            if (!localStorageService.get('api_key')) {
+	                refreshContent().then(function () {
+	                    console.log('refresh key');
+	                }, function () {
+	                    console.log('refresh key fail');
+	                });
+	                localStorageService.set('firstname', '');
+	                localStorageService.set('lastname', '');
+	                localStorageService.set('loggedInUser', '');
+	                userInfo.isLogin = false;
+
+	                userInfo.userFirstName = localStorageService.get('firstname');
+	                userInfo.userLastName = localStorageService.get('lastname');
+	                userInfo.userAppId = localStorageService.get('loggedInUser');
+	            }
+	            var deferred = $q.defer();
+	            $http({
+	                method: 'POST',
+	                url: baseUrl + '/app/all?logout=true',
+	                data: deviceService.getWhoami(),
+	                dataType: 'json',
+	                headers: { 'iknow-api-key': localStorageService.get('api_key') }
+	            }).then(function successCallback(response) {
+	                console.log(response);
+	                localStorageService.set('api_key', response.data.auth.key);
+	                localStorageService.set('firstname', '');
+	                localStorageService.set('lastname', '');
+	                localStorageService.set('loggedInUser', '');
+	                userInfo.userFirstName = localStorageService.get('firstname');
+	                userInfo.userLastName = localStorageService.get('lastname');
+	                userInfo.userAppId = localStorageService.get('loggedInUser');
+	                userInfo.isLogin = false;
+	                refreshContent().then(function () {
+	                    console.log('refresh content');
+	                }, function () {
+	                    console.log('refresh content fail');
+	                });
+	                getMenus(menus);
+	            }, function errorCallback(response) {
+	                deferred.reject();
+	            });
+
+	            return deferred.promise;
+	        }
+
+	        function getContent(key) {
+	            return localStorageService.get(key);
+	        }
+	        return {
+	            refreshContent: refreshContent,
+	            getContent: getContent,
+	            userLogin: userLogin,
+	            logout: logout,
+	            userInfo: userInfo,
+	            menus: menus,
+	            menuIScroller: menuIScroller
+	        };
+	    }
 	})();
 
 /***/ }

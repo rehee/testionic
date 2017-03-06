@@ -4,6 +4,7 @@
   "description": "materialProject: An Ionic project",
   "dependencies": {
     "angular-hammer": "^2.2.0",
+    "angular-local-storage": "^0.5.2",
     "bootstrap": "3.3.7",
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",

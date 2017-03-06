@@ -10,11 +10,14 @@
 require('ng-iscroll');
 require('hammerjs');
 require('angular-hammer');
-var app = angular.module('app', ['ionic', 'ng-iscroll','hmTouchEvents']);
+require('angular-local-storage')
+var app = angular.module('app', ['ionic', 'ng-iscroll','hmTouchEvents','LocalStorageModule']);
 require('./services/church_service.js');
 require('./services/device_service.js');
 require('./directives/iscroll.js');
-app.run(function ($ionicPlatform, churchService, deviceService) {
+require('./services/layout_service.js');
+require('./services/content_service.js');
+app.run(function ($ionicPlatform, churchService, deviceService,layoutService) {
   $ionicPlatform.ready(function () {
     if (window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -28,9 +31,8 @@ app.run(function ($ionicPlatform, churchService, deviceService) {
     }
     if (typeof (device) != 'undefined') {
       deviceService.initDevice(true, device);
-
     } else {
-      let device = {
+      let thisDevice = {
         avaliable: true,
         platform: 'Android',
         version: '6.0.',
@@ -41,16 +43,20 @@ app.run(function ($ionicPlatform, churchService, deviceService) {
         isVirtual: 'true',
         serial: '0793a2f4'
       };
-      deviceService.initDevice(false, device);
+      
+      deviceService.initDevice(false, thisDevice);
+     
     }
     if (window.StatusBar) {
       StatusBar.styleDefault();
     }
-    console.log(churchService.church.init.menu.public);
+    layoutService.layout.title = churchService.church.name;
+    
   });
 })
-
+require('./localStorage.js')
 require('./controllers/_share_ctl.js');
-
+require('./controllers/home_ctl.js');
 require('./route.js')
+
 

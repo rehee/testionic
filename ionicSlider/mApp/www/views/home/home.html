@@ -1,0 +1,99 @@
+<style>
+    .loginBox{
+        top:-165px;
+        opacity: 0;
+    }
+    .loginBox.show {
+        top: 50px;
+        transition: top 0.3s;
+        -moz-transition: top 0.3s;
+        /* Firefox 4 */
+        -webkit-transition: all 0.3s;
+        /* Safari 和 Chrome */
+        -o-transition: all 0.3s;
+        /* Opera */
+        transition-delay: 0.3s;
+        -moz-transition-delay: 0.3s;
+        /* Firefox 4 */
+        -webkit-transition-delay: 0.3s;
+        /* Safari 和 Chrome */
+        -o-transition-delay: 0.3s;
+        opacity: 1;
+    }
+</style>
+<ion-view ng-controller="homeCtl as vm">
+    <ion-content class="padding">
+        <div class="pulToRefreshDiv">
+            <i class="fa fa-chevron-down"></i> Pull To Refresh <i class="fa fa-chevron-down"></i>
+        </div>
+        <div class="loginBox {{vm.loginMark}}">
+            <h4 style="padding: 2px 10px; margin: 8px;"><i class="fa fa-lock"></i> Login With iKnow</h5>
+                <hr style="margin: 0px;" />
+                <div class="loginTextBox"><input type="email" ng-model="vm.loginModule.userEmail" class="form-control canDisable" placeholder="email address" id="loginEmail"></div>
+                <div class="loginTextBox"><input type="password" class="form-control canDisable" placeholder="password" ng-model="vm.loginModule.userPass" id="loginPassword" /></div>
+                <div class="loginTextBox" style="float:left; width:50%"><button class="btn btn-block btn-warning cancelLogin canDisable" ng-click="vm.showLogin()">Cancel</button></div>
+                <div class="loginTextBox" style="float:left; width:50%"><button class="btn btn-block btn-success submitLogin canDisable" ng-click="vm.login()" >Login</button></div>
+                <div style="clear:both"></div>
+        </div>
+        <button class="btn btn-success btn-block pullToRefreshEmulate" ng-click="vm.refresh()" style="margin-bottom:5px;">Refresh Content</button>
+        <div class="loggedOutCont" ng-if="vm.user.isLogin==false" style="margin: -6px; margin-bottom: 6px;">
+            <div class="loggedOutSide">
+                <button class="btn btn-info btn-block subscribeOption">I\'m New Here</button>
+            </div>
+            <div class="loggedOutSide">
+                <button class="btn btn-warning btn-block loginOption" ng-click="vm.showLogin(true)">Log In</button>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+
+        <div ng-if="vm.isLoading==true" class="appmod appmod-default">
+            <div class="appmod-heading">
+                <h3 class="appmod-title"><i class="fa fa-spin fa-spinner"></i> Loading Initial Content!</h3>
+            </div>
+            <div class="appmod-body">
+                <div class="startupprocess">Initialising themes<br></div>
+                Initial Load Finished. <br>Tap the home button.
+            </div>
+        </div>
+        <div>
+            
+        </div>
+        <div ng-repeat="item in vm.content">
+            <div ng-if="item.type=='block'">
+                <div class="appmod appmod-{{item.style}}">
+                    <div class="appmod-heading">
+                        <h3 class="appmod-title">{{item.title}}</h3>
+                    </div>
+                    <div class="appmod-body" ng-bind-html="item.data"></div>
+
+                    '</div>
+            </div>
+            <div ng-if="item.type=='blog'">
+                blog
+            </div>
+            <div ng-if="item.type=='scroller'">
+                scroller
+            </div>
+            <div ng-if="item.type=='votd'">
+                <div class="appmod appmod-{{item.style}}">
+                    <div class="appmod-heading">
+                        <h3 class="appmod-title">{{item.title}}</h3>
+                    </div>
+                    <div class="appmod-body">
+                        <p class="votd-passage">{{item.data.passage}}</p>
+                        <p class="votd-title">~ {{item.data.title}}</p>
+                        <p class="votd-provider">{{item.data.provider}}</p>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="item.type=='link'">
+                <span class="leaveapplink" data-href="{{item.data.url}}"><img src="{{item.data.image.b64}}" class="dash_image" style="height:{{vm.getImageHeight(item.data.height)}}px;"/></span>
+            </div>
+            <div ng-if="item.type=='event'">
+                <!--<span class="leaveapplink" data-href="{{item.data.url}}"><img src="{{}}" class="dash_image" style="height:' + calc_height + 'px"/></span>-->
+
+            </div>
+
+        </div>
+    </ion-content>
+</ion-view>

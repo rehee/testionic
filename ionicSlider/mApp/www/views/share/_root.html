@@ -2,65 +2,82 @@
     .scroll {
         height: 100%;
     }
+    
     #iscroller {
         display: inline-block;
         width: auto;
     }
-
+    
     .text-width {
         width: 150px;
     }
-
+    
     .tfl-overflow {
         overflow: hidden !important;
         -webkit-overflow-scrolling: touch;
     }
-
+    
     #iscrollwrapper {
         width: 100%;
     }
-    .chevvy{
+    
+    .chevvy {
         z-index: 1000;
     }
-    .optionText{
-        height:16px;
-    }
-    .optionText.no_height{
-        height:0px;
-        transition: all 2s;
-        -moz-transition: all 2s;    /* Firefox 4 */
-        -webkit-transition: all 2s;    /* Safari 和 Chrome */
-        -o-transition: all 2s;    /* Opera */
-        transition-delay: 2s;
-        -moz-transition-delay: 2s;    /* Firefox 4 */
-        -webkit-transition-delay: 2s;    /* Safari 和 Chrome */
-        -o-transition-delay: 2s;    /* Opera */
-    }
-    .no_height{
-        opacity:1;
-    }
-    .no_height .option_text_span{
-        opacity:0;
-        transition: all 2s;
-        -moz-transition: all 2s;    /* Firefox 4 */
-        -webkit-transition: all 2s;    /* Safari 和 Chrome */
-        -o-transition: all 2s;    /* Opera */
-        transition-delay: 2s;
-        -moz-transition-delay: 2s;    /* Firefox 4 */
-        -webkit-transition-delay: 2s;    /* Safari 和 Chrome */
-        -o-transition-delay: 2s;    /* Opera */
+    
+    .optionText {
+        height: 16px;
     }
     
+    .optionText.no_height {
+        height: 0px;
+        transition: all 2s;
+        -moz-transition: all 2s;
+        /* Firefox 4 */
+        -webkit-transition: all 2s;
+        /* Safari 和 Chrome */
+        -o-transition: all 2s;
+        /* Opera */
+        transition-delay: 2s;
+        -moz-transition-delay: 2s;
+        /* Firefox 4 */
+        -webkit-transition-delay: 2s;
+        /* Safari 和 Chrome */
+        -o-transition-delay: 2s;
+        /* Opera */
+    }
     
+    .no_height {
+        opacity: 1;
+    }
+    
+    .no_height .option_text_span {
+        opacity: 0;
+        transition: all 2s;
+        -moz-transition: all 2s;
+        /* Firefox 4 */
+        -webkit-transition: all 2s;
+        /* Safari 和 Chrome */
+        -o-transition: all 2s;
+        /* Opera */
+        transition-delay: 2s;
+        -moz-transition-delay: 2s;
+        /* Firefox 4 */
+        -webkit-transition-delay: 2s;
+        /* Safari 和 Chrome */
+        -o-transition-delay: 2s;
+        /* Opera */
+    }
 </style>
 
-<ion-content class="" style="height: 100%">
+<ion-content class="" style="height: 90%">
+    <div ng-controller="shareCtl as vm" id="ttt">{{vm.menus.menu.length}}</div>
+    <ion-nav-view name="body">
 
-    <ion-nav-view name="contain">
     </ion-nav-view>
 
 
-
+    
 </ion-content>
 <div id="bottom-bar-cont" ng-controller="shareCtl as vm">
     <div id="chevron-left" class="chevvy" style="top:25%"><i class="fa fa-chevron-left"></i></div>
@@ -69,8 +86,7 @@
             <table class="table" hm-panstart="vm.onHammer('start')" hm-panend="vm.onHammer('finish')">
                 <tr>
                     <td ng-repeat="item in vm.menus">
-                        <div class="loggedInIcon" style="text-align: center; width: {{vm.width*0.9/5}}px;display: inline-block;" 
-                            hm-tap="vm.onHammer('tap')">
+                        <div class="loggedInIcon" style="text-align: center; width: {{vm.width*0.9/5}}px;display: inline-block;" hm-tap="vm.onHammer('tap',$index)">
                             <div class="optionIcon" style="font-size: 3em;">
                                 <i class="fa {{item.icon}}"></i>
                             </div>
