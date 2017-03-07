@@ -12,18 +12,21 @@ require('angular');
         userInfo.isLogin = (!isNaN(userInfo.userAppId) && userInfo.userAppId > 0);
         let menus = [];
         var menuIScroller = { a: {} };
-        
+
         function getMenus(menu) {
             menu.splice(0, menu.length)
             for (let item of churchService.church.init.menu.public) {
-                if (item.private == false || userInfo.isLogin==true)  {
+                if (item.private == false || userInfo.isLogin == true) {
                     menu.push(item);
                 }
             }
-            
+
         }
-         getMenus(menus);
-         console.log(menus)
+        //  getMenus(menus);
+        for (let item of churchService.church.init.menu.public) {
+            item.displayMenu = (!item.private || userInfo.isLogin == true)
+            menus.push(item);
+        }
         // let userFirstName = localStorageService.get('firstname');
         // let userLastName = localStorageService.get('lastname');
         // let userAppId = localStorageService.get('loggedInUser');
@@ -87,11 +90,10 @@ require('angular');
                     userInfo.userLastName = localStorageService.get('lastname');
                     userInfo.userAppId = localStorageService.get('loggedInUser');
                     userInfo.isLogin = true
-                    for (let item of menus) {
-                        item.displayMenu = true;
-                    }
                     
-                    getMenus(menus);
+                    for (let item of menus) {
+                        item.displayMenu = (!item.private || userInfo.isLogin == true)
+                    }
                     refreshContent().then(
                         function () {
                             console.log('refresh content');
@@ -158,7 +160,7 @@ require('angular');
                     }
                 )
                 getMenus(menus);
-                
+
             }, function errorCallback(response) {
                 deferred.reject();
             });

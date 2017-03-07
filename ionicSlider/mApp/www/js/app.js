@@ -47848,12 +47848,36 @@ webpackJsonp([0,1],[
 	                }
 	            }
 	        }
-	        getMenus(menus);
-	        console.log(menus);
-	        // let userFirstName = localStorageService.get('firstname');
-	        // let userLastName = localStorageService.get('lastname');
-	        // let userAppId = localStorageService.get('loggedInUser');
-	        // let userLogin = false;
+	        //  getMenus(menus);
+	        var _iteratorNormalCompletion2 = true;
+	        var _didIteratorError2 = false;
+	        var _iteratorError2 = undefined;
+
+	        try {
+	            for (var _iterator2 = churchService.church.init.menu.public[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                var item = _step2.value;
+
+	                item.displayMenu = !item.private || userInfo.isLogin == true;
+	                menus.push(item);
+	            }
+	            // let userFirstName = localStorageService.get('firstname');
+	            // let userLastName = localStorageService.get('lastname');
+	            // let userAppId = localStorageService.get('loggedInUser');
+	            // let userLogin = false;
+	        } catch (err) {
+	            _didIteratorError2 = true;
+	            _iteratorError2 = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                    _iterator2.return();
+	                }
+	            } finally {
+	                if (_didIteratorError2) {
+	                    throw _iteratorError2;
+	                }
+	            }
+	        }
 
 	        function refreshContent() {
 	            var deferred = $q.defer();
@@ -47868,29 +47892,29 @@ webpackJsonp([0,1],[
 	                    localStorageService.set('lastUpdated', new Date().getTime());
 	                    localStorageService.set('api_key', response.data.auth.key);
 	                    //console.log(response.data);
-	                    var _iteratorNormalCompletion2 = true;
-	                    var _didIteratorError2 = false;
-	                    var _iteratorError2 = undefined;
+	                    var _iteratorNormalCompletion3 = true;
+	                    var _didIteratorError3 = false;
+	                    var _iteratorError3 = undefined;
 
 	                    try {
-	                        for (var _iterator2 = Object.entries(response.data.data)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                            var _step2$value = _slicedToArray(_step2.value, 2),
-	                                key = _step2$value[0],
-	                                value = _step2$value[1];
+	                        for (var _iterator3 = Object.entries(response.data.data)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                            var _step3$value = _slicedToArray(_step3.value, 2),
+	                                key = _step3$value[0],
+	                                value = _step3$value[1];
 
 	                            localStorageService.set(key, value);
 	                        }
 	                    } catch (err) {
-	                        _didIteratorError2 = true;
-	                        _iteratorError2 = err;
+	                        _didIteratorError3 = true;
+	                        _iteratorError3 = err;
 	                    } finally {
 	                        try {
-	                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                                _iterator2.return();
+	                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                                _iterator3.return();
 	                            }
 	                        } finally {
-	                            if (_didIteratorError2) {
-	                                throw _iteratorError2;
+	                            if (_didIteratorError3) {
+	                                throw _iteratorError3;
 	                            }
 	                        }
 	                    }
@@ -47934,32 +47958,32 @@ webpackJsonp([0,1],[
 	                    userInfo.userLastName = localStorageService.get('lastname');
 	                    userInfo.userAppId = localStorageService.get('loggedInUser');
 	                    userInfo.isLogin = true;
-	                    var _iteratorNormalCompletion3 = true;
-	                    var _didIteratorError3 = false;
-	                    var _iteratorError3 = undefined;
+
+	                    var _iteratorNormalCompletion4 = true;
+	                    var _didIteratorError4 = false;
+	                    var _iteratorError4 = undefined;
 
 	                    try {
-	                        for (var _iterator3 = menus[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                            var item = _step3.value;
+	                        for (var _iterator4 = menus[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                            var item = _step4.value;
 
-	                            item.displayMenu = true;
+	                            item.displayMenu = !item.private || userInfo.isLogin == true;
 	                        }
 	                    } catch (err) {
-	                        _didIteratorError3 = true;
-	                        _iteratorError3 = err;
+	                        _didIteratorError4 = true;
+	                        _iteratorError4 = err;
 	                    } finally {
 	                        try {
-	                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	                                _iterator3.return();
+	                            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                                _iterator4.return();
 	                            }
 	                        } finally {
-	                            if (_didIteratorError3) {
-	                                throw _iteratorError3;
+	                            if (_didIteratorError4) {
+	                                throw _iteratorError4;
 	                            }
 	                        }
 	                    }
 
-	                    getMenus(menus);
 	                    refreshContent().then(function () {
 	                        console.log('refresh content');
 	                    }, function () {

@@ -85,7 +85,7 @@
         <div id="iscroller">
             <table class="table" hm-panstart="vm.onHammer('start')" hm-panend="vm.onHammer('finish')">
                 <tr>
-                    <td ng-repeat="item in vm.menus">
+                    <td ng-repeat="item in vm.menus | filter:{displayMenu:true}">
                         <div class="loggedInIcon" style="text-align: center; width: {{vm.width*0.9/5}}px;display: inline-block;" hm-tap="vm.onHammer('tap',$index)">
                             <div class="optionIcon" style="font-size: 3em;">
                                 <i class="fa {{item.icon}}"></i>
