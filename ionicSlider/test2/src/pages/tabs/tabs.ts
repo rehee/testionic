@@ -6,6 +6,8 @@ import { ContactPage } from '../contact/contact';
 
 import { Events } from 'ionic-angular';
 
+
+
 @Component({
   templateUrl: 'tabs.html'
 })
@@ -35,6 +37,31 @@ export class TabsPage {
   scrollableTabsopts: any = {};
   
   addTab(): void {
+    this.tabsList.push({
+      root: this.tab1Root,
+      icon: 'home',
+      text: 'Home'
+    });
+    this.tabsList.push({
+      root: this.tab1Root,
+      icon: 'home',
+      text: 'Home'
+    });
+    this.tabsList.push({
+      root: this.tab1Root,
+      icon: 'home',
+      text: 'Home'
+    });
+    this.tabsList.push({
+      root: this.tab1Root,
+      icon: 'home',
+      text: 'Home'
+    });
+    this.tabsList.push({
+      root: this.tab1Root,
+      icon: 'home',
+      text: 'Home'
+    });
     this.showTabs = !this.showTabs;
     this.refreshScrollbarTabs();
   };

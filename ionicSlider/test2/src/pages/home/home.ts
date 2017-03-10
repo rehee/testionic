@@ -11,7 +11,7 @@ export class HomePage {
   layout:any = this.service.layout;
 
   constructor(public navCtrl: NavController,public service :CommonService) {
-
+    
   }
 
 }
